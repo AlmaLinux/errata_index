@@ -27,12 +27,13 @@
 </template>
 
 <script>
-import ErrataData from '../assets/errata.json'
 import { ref } from 'vue'
+import axios from 'axios'
 export default {
   name: "ErrataMainPage.vue",
   data () {
     return {
+      ErrataData: [],
       filter: ref(''),
       separator: ref('cell'),
       initialPagination: ref({rowsPerPage: 15}),
@@ -44,15 +45,20 @@ export default {
       ]
     }
   },
+  created () {
+    axios
+      .get('/8/errata.json')
+        .then(response => (this.ErrataData = response.data))
+  },
   computed: {
     AdvirosiesList () {
       let rows = []
-      for (let i in ErrataData) {
+      for (let i in this.ErrataData) {
         rows.push({
-          'advisory': ErrataData[i]['updateinfo_id'],
-          'description': ErrataData[i]['summary'],
-          'severity': ErrataData[i]['severity'],
-          'publish_date': this.convertTimestamp(ErrataData[i]['updated_date'])
+          'advisory': this.ErrataData[i]['updateinfo_id'],
+          'description': this.ErrataData[i]['summary'],
+          'severity': this.ErrataData[i]['severity'],
+          'publish_date': this.convertTimestamp(this.ErrataData[i]['updated_date'])
         })
       }
       return rows.sort((first, second) => new Date(second['publish_date']) - new Date(first['publish_date']))
@@ -68,7 +74,7 @@ export default {
       // return `${date.getDate()}/${date.getMonth()}/${date.getFullYear()}`
     },
     makeValidHref (advisory) {
-      return `static/html/${advisory.replace(/:/g, "-")}.html`
+      return `${advisory.replace(/:/g, "-")}.html`
     }
   }
 }
