@@ -1,0 +1,131 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap');
+
+body {
+    background-color: #F0F0F0;
+	background-color: #FFF;
+	font-size: 16px;
+	font-family: 'Montserrat', sans-serif;
+    line-height: 1.7;
+    font-weight: 300;
+	color: #000;
+	background: url('alma-light-bg.jpg') top center no-repeat;
+	background-size: cover;
+}
+a {
+	color: #000;
+	text-decoration: underline;
+}
+a:hover {
+	color: rgb(0,105,218);
+}
+.header {
+    height:50px;
+    background-color:white;
+    box-shadow: 10px 0 5px -2px #888;
+	background: #082336;
+}
+.header-logo {
+    margin-top: 0.65rem;
+    margin-left: -1rem;
+    vertical-align: top;
+	width: 160px;
+	
+}
+.tabs-content {
+	 border: 0;
+}
+.button-group > a {
+    background-color: teal;
+    margin-bottom: 0rem;
+    color: grey;
+    border: 0px; !important;
+}
+.button.hollow:focus, .button.hollow:hover{
+    background-color: #F2F2F2;
+}
+.button-group > a.active{
+    background-color: #F2F2F2;
+
+}
+.button.hollow {
+    border: 0px;
+    padding: 1rem 1rem;
+    height: 49px;
+    background-color: transparent;
+}
+.button .hollow:hover {
+    border: 0;
+    cursor: pointer;
+    background-color:gray;
+}
+.button.hollow.secondary{
+    border: 0;
+}
+.card{
+    background-color: white;
+    margin: 1rem 0 2rem 0;
+    box-shadow: 1px 0 5px -1px #888;
+}
+.card-header{
+    padding-top: 0.5rem;
+    background-color: #0b2335;
+	background: rgb(11,35,53);
+    color: white;
+    display: inline-block;
+}
+.card-body{
+    padding: 1.6rem;
+}
+.card-body .row{
+    padding-bottom: 0.5rem;
+}
+.card-body .row .medium-3 {
+    padding-left: 2rem;
+}
+.tabs-content{
+    background-color: transparent;
+}
+.tabs{
+    /*padding: 1rem 1.5rem;*/
+    border: 0px;
+}
+.tabs-title > a{
+    height: 49px;
+    padding: 1.15rem 1.5rem;
+    font-size: .9rem;
+    color: #3b3b3b;
+}
+.tabs-title > a:hover{
+    color: black;
+    background-color: #f6f6f6;
+
+}
+.tabs-title > a[aria-selected="true"] {
+    color: #3b3b3b;
+}
+
+.tabs-title > a > img{
+    margin-top: -2px;
+    /*width: 1.1rem;*/
+    height: 1.1rem;
+}
+.card-header > img {
+    margin-top: -0.5rem;
+    height: 1.4rem;
+}
+.card-header > img.cl-logo {
+    margin-top: -0.4rem;
+    height: 1.5rem;
+}
+
+.card-header > h5 {
+    display: inline-block;
+}
+
+.header-container li{
+    display: inline;
+}
+
+.checksum {
+    color: #666666;
+}

@@ -1,20 +1,33 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <div>
+    <q-layout view="hHh lpr fff" style="max-height: 921px; min-height: 921px;">
+      <q-header style="height: 60px; background-color: #082336;">
+        <q-toolbar>
+          <q-toolbar-title>
+            <img class="header-logo" src="./assets/misc/static/almalinux-logo.png" alt="AlmaLinux">
+          </q-toolbar-title>
+        </q-toolbar>
+      </q-header>
+      <q-page-container style="padding-top: initial;">
+        <ErrataMainPage />
+      </q-page-container>
+    </q-layout>
+  </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
-
+import ErrataMainPage from './components/ErrataMainPage.vue'
+import { setCssVar } from 'quasar'
+setCssVar('primary', '#082336')
 export default {
   name: 'App',
   components: {
-    HelloWorld
+    ErrataMainPage
   }
 }
 </script>
 
-<style>
+<style lang="css">
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -22,5 +35,11 @@ export default {
   text-align: center;
   color: #2c3e50;
   margin-top: 60px;
+}
+.header-logo {
+  float: left;
+  margin-left: 20px;
+  padding-top: 5px;
+	width: 160px;
 }
 </style>
