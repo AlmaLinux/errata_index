@@ -74,7 +74,7 @@ export default {
       // return `${date.getDate()}/${date.getMonth()}/${date.getFullYear()}`
     },
     makeValidHref (advisory) {
-      return `${advisory.replace(/:/g, "-")}.html`
+      return `/8/${advisory.replace(/:/g, "-")}.html`
     }
   }
 }
