@@ -1,5 +1,5 @@
 module.exports = {
-  publicPath: '/8/',
+  publicPath: '/',
   pluginOptions: {
     quasar: {
       importStrategy: 'kebab',
