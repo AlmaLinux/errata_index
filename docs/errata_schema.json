@@ -19,6 +19,18 @@
                         "checksum": "947c02f7c002e80dcc56b199a18b09e39c3854092e6080680c7a46ed8c0cdf16",
                         "checksum_type": "sha256",
                         "reboot_suggested": false
+                    },
+                    {
+                        "name": "ruby",
+                        "version": "1.40.2",
+                        "release": "27.module_el8.4.0+2523+3300d70f.alma",
+                        "epoch": "0",
+                        "arch": "x86_64",
+                        "src": "libguestfs-1.40.2-27.module_el8.4.0+2523+3300d70f.alma.src.rpm",
+                        "filename": "ruby-libguestfs-1.40.2-27.module_el8.4.0+2523+3300d70f.alma.x86_64.rpm",
+                        "checksum": "1fb0428299deefed58292bd47d6b7508b3095e685dc2cb85019ab3559a7d71a9",
+                        "checksum_type": "sha256",
+                        "reboot_suggested": false
                     }
                 ],
                 "modules": [
@@ -28,6 +40,13 @@
                         "version": "8040020210810210000",
                         "arch": "x86_64",
                         "context": "5081a262"
+                    },
+                    {
+                        "name": "ruby",
+                        "stream": "2.5",
+                        "version": "8030020200624105530",
+                        "arch": "x86_64",
+                        "context": "30b713e6"
                     }
                 ],
                 "references": [
