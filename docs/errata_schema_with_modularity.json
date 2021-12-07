@@ -30,7 +30,8 @@
                         "filename": "golang-1.16.7-1.module_el8.5.0+2541+1aac4e3f.x86_64.rpm",
                         "checksum": "947c02f7c002e80dcc56b199a18b09e39c3854092e6080680c7a46ed8c0cdf16",
                         "checksum_type": "sha256",
-                        "reboot_suggested": false
+                        "reboot_suggested": false,
+                        "module": "go-toolset:rhel8:8050020211007210837:8aa62369:x86_64"
                     },
                     {
                         "name": "ruby",
@@ -42,7 +43,8 @@
                         "filename": "ruby-libguestfs-1.40.2-27.module_el8.4.0+2523+3300d70f.alma.x86_64.rpm",
                         "checksum": "1fb0428299deefed58292bd47d6b7508b3095e685dc2cb85019ab3559a7d71a9",
                         "checksum_type": "sha256",
-                        "reboot_suggested": false
+                        "reboot_suggested": false,
+                        "module": "ruby:2.5:8030020200624105530:30b713e6:x86_64"
                     }
                 ],
                 "modules": [
