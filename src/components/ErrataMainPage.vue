@@ -5,16 +5,16 @@
              style="border: #082336; color: #082336;" class="my-sticky-dynamic">
 
       <template v-slot:top-left>
-          <div class="row">
-            <div class="col">
+          <div class="row" style="align-items: center;">
+            <div class="col-3">
               <q-input borderless dense v-model="filter" placeholder="Search" dark style="padding-left: 20px;">
                 <template v-slot:prepend>
                   <q-icon name="search" />
                 </template>
               </q-input>
             </div>
-            <div class="col">
-              <q-btn-toggle dark v-model="errataSource" :options="errataSourceOptions" @update:model-value="updateErrataSource"/>
+            <div class="col-8">
+              <q-btn-toggle push toggle-color="amber-8" v-model="errataSource" :options="errataSourceOptions" @update:model-value="updateErrataSource"/>
             </div>
           </div>
       </template>
