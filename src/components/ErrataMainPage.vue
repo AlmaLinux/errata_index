@@ -1,15 +1,24 @@
 <template>
   <div>
-    <q-table :columns="columns" :rows="AdvirosiesList" :separator="separator" :filter="filter"
+    <q-table :columns="columns" :visibleColumns="visibleColumns" :rows="AdvirosiesList" :separator="separator" :filter="filter"
              flat bordered square :pagination="initialPagination" @row-click="openErrata"
              style="border: #082336; color: #082336;" class="my-sticky-dynamic">
+
       <template v-slot:top-left>
-        <q-input borderless dense v-model="filter" placeholder="Search" dark style="padding-left: 20px;">
-          <template v-slot:prepend>
-            <q-icon name="search" />
-          </template>
-        </q-input>
+          <div class="row">
+            <div class="col">
+              <q-input borderless dense v-model="filter" placeholder="Search" dark style="padding-left: 20px;">
+                <template v-slot:prepend>
+                  <q-icon name="search" />
+                </template>
+              </q-input>
+            </div>
+            <div class="col">
+              <q-btn-toggle dark v-model="errataSource" :options="errataSourceOptions" @update:model-value="updateErrataSource"/>
+            </div>
+          </div>
       </template>
+
       <template v-slot:header="props">
         <q-tr :props="props" class="errata_table">
            <q-th v-for="col in props.cols" :key="col.name" :props="props">
@@ -29,6 +38,13 @@
 <script>
 import { ref } from 'vue'
 import axios from 'axios'
+import path from 'path'
+const ERRATA_SOURCES = {
+  'All': null,
+  'AlmaLinux 8': '8',
+  'AlmaLinux 9': '9'
+}
+
 export default {
   name: "ErrataMainPage.vue",
   data () {
@@ -40,15 +56,23 @@ export default {
       columns: [
         {name: 'advisory', align: 'center', label: 'Advisory', field: 'advisory'},
         {name: 'description', align: 'center', label: 'Description', field: 'description'},
+        {name: 'almalinux_version', align: 'center', label: 'AlmaLinux Version', field: 'almalinux_version'},
         {name: 'severity', align: 'center', label: 'Severity', field: 'severity'},
         {name: 'publish_date', align: 'center', label: 'Publish Date', field: 'publish_date'}
-      ]
+      ],
+      visibleColumns: ['advisory', 'description', 'severity', 'publish_date'],
+      errataSourceOptions: [],
+      errataSource: ref('All')
     }
   },
   created () {
-    axios
-      .get('/8/errata.json')
-        .then(response => (this.ErrataData = response.data))
+    Object.keys(ERRATA_SOURCES).forEach((source) => {
+      this.errataSourceOptions.push({
+        label: source,
+        value: source
+      })
+    })
+    this.loadErrataData();
   },
   computed: {
     AdvirosiesList () {
@@ -56,6 +80,7 @@ export default {
       for (let i in this.ErrataData) {
         rows.push({
           'advisory': this.ErrataData[i]['updateinfo_id'],
+          'almalinux_version': this.ErrataData[i]['almalinux_version'],
           'description': this.ErrataData[i]['summary'],
           'severity': this.ErrataData[i]['severity'],
           'publish_date': this.convertTimestamp(this.ErrataData[i]['updated_date'])
@@ -65,16 +90,70 @@ export default {
     }
   },
   methods: {
+    loadErrataData () {
+      if (this.errataSource != 'All') {
+        this.fetchErratasByAlmaLinuxVersion(ERRATA_SOURCES[this.errataSource]).then((JsonData) => {
+          this.ErrataData = JsonData
+          this.showVersionColumn(false)
+        })
+      } else {
+        this.fetchAllErratas().then((JsonData) => {
+          this.ErrataData = JsonData
+          this.showVersionColumn(true)
+        })
+      }
+    },
     openErrata (evt, row) {
-      window.location.href = this.makeValidHref(row['advisory'])
+      window.location.href = this.makeValidHref(row['almalinux_version'], row['advisory'])
     },
     convertTimestamp (timestamp) {
       let date = new Date(timestamp['$date'])
       return date.toDateString()
-      // return `${date.getDate()}/${date.getMonth()}/${date.getFullYear()}`
     },
-    makeValidHref (advisory) {
-      return `/8/${advisory.replace(/:/g, "-")}.html`
+    makeValidHref (version, advisory) {
+      return `/${version}/${advisory.replace(/:/g, "-")}.html`
+    },
+    updateErrataSource () {
+      this.loadErrataData()
+    },
+    fetchErratasByAlmaLinuxVersion (version) {
+      return new Promise(resolve => {
+        let resource = path.join(version, 'errata.json')
+        axios.get(resource).then((result) => {
+          let data = result.data
+          for (let errata in data) {
+            data[errata]['almalinux_version'] = version
+          }
+          resolve(result.data)
+        });
+      })
+    },
+    fetchAllErratas () {
+      return new Promise(resolve => {
+        let promises = [];
+        const dists = Object.keys(ERRATA_SOURCES).filter(i=>i != 'All')
+        for (let dist in dists) {
+          let promise = this.fetchErratasByAlmaLinuxVersion(ERRATA_SOURCES[dists[dist]]).then((JsonData) => {
+            return JsonData
+          })
+          promises.push(promise)
+        }
+        Promise.all(promises).then((result) => {
+          // Since every promise returns its own array, we need to put them all
+          // together into one array.
+          let data = []
+          result.forEach((p) => {
+            p.forEach((d) => {
+              data.push(d)
+            })
+          })
+          resolve(data)
+        })
+      })
+    },
+    showVersionColumn (show) {
+      let noVersion = ['advisory', 'description', 'severity', 'publish_date']
+      this.visibleColumns = show? noVersion.concat('almalinux_version'): noVersion
     }
   }
 }
