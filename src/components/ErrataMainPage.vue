@@ -40,6 +40,7 @@ import { ref } from 'vue'
 import axios from 'axios'
 import path from 'path'
 const ERRATA_SOURCES = {
+// Label: Folder
   'All': null,
   'AlmaLinux 8': '8',
   'AlmaLinux 9': '9'
@@ -56,6 +57,7 @@ export default {
       columns: [
         {name: 'advisory', align: 'center', label: 'Advisory', field: 'advisory'},
         {name: 'description', align: 'center', label: 'Description', field: 'description'},
+        // This colum will only be shown when showing the erratas for all AlmaLinux versions
         {name: 'almalinux_version', align: 'center', label: 'AlmaLinux Version', field: 'almalinux_version'},
         {name: 'severity', align: 'center', label: 'Severity', field: 'severity'},
         {name: 'publish_date', align: 'center', label: 'Publish Date', field: 'publish_date'}
@@ -92,7 +94,7 @@ export default {
   methods: {
     loadErrataData () {
       if (this.errataSource != 'All') {
-        this.fetchErratasByAlmaLinuxVersion(ERRATA_SOURCES[this.errataSource]).then((JsonData) => {
+        this.fetchErratasFromVersion(ERRATA_SOURCES[this.errataSource]).then((JsonData) => {
           this.ErrataData = JsonData
           this.showVersionColumn(false)
         })
@@ -116,11 +118,14 @@ export default {
     updateErrataSource () {
       this.loadErrataData()
     },
-    fetchErratasByAlmaLinuxVersion (version) {
+    fetchErratasFromVersion (version) {
       return new Promise(resolve => {
         let resource = path.join(version, 'errata.json')
         axios.get(resource).then((result) => {
           let data = result.data
+          // When showing all erratas, we need a way to know
+          // the AlmaLinux version that an errata belongs to.
+          // That's why we are adding such field into every errata.
           for (let errata in data) {
             data[errata]['almalinux_version'] = version
           }
@@ -131,16 +136,17 @@ export default {
     fetchAllErratas () {
       return new Promise(resolve => {
         let promises = [];
-        const dists = Object.keys(ERRATA_SOURCES).filter(i=>i != 'All')
-        for (let dist in dists) {
-          let promise = this.fetchErratasByAlmaLinuxVersion(ERRATA_SOURCES[dists[dist]]).then((JsonData) => {
+        // We take all versions from ERRATA_SOURCES except 'All'
+        const versions = Object.keys(ERRATA_SOURCES).filter(i=>i != 'All')
+        for (let version in versions) {
+          let promise = this.fetchErratasFromVersion(ERRATA_SOURCES[versions[version]]).then((JsonData) => {
             return JsonData
           })
           promises.push(promise)
         }
         Promise.all(promises).then((result) => {
           // Since every promise returns its own array, we need to put them all
-          // together into one array.
+          // together into a single one.
           let data = []
           result.forEach((p) => {
             p.forEach((d) => {
