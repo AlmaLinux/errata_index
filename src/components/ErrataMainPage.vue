@@ -1,8 +1,8 @@
 <template>
   <div>
-    <q-table :columns="columns" :visibleColumns="visibleColumns" :rows="AdvirosiesList" :separator="separator" :filter="filter"
-             flat bordered square :pagination="initialPagination" @row-click="openErrata"
-             style="border: #082336; color: #082336;" class="my-sticky-dynamic">
+    <q-table v-model:pagination="pagination" :columns="columns" :visibleColumns="visibleColumns"
+             :rows="AdvisoriesList" :separator="separator" :filter="filter" flat bordered square
+             @row-click="openErrata" style="border: #082336; color: #082336;" class="my-sticky-dynamic">
 
       <template v-slot:top-left>
           <div class="row" style="align-items: center;">
@@ -14,7 +14,8 @@
               </q-input>
             </div>
             <div class="col-8">
-              <q-btn-toggle push toggle-color="amber-8" v-model="errataSource" :options="errataSourceOptions" @update:model-value="updateErrataSource"/>
+              <q-btn-toggle push v-model="errataSource" :options="errataSourceOptions"
+                            toggle-color="amber-8" @update:model-value="updateErrataSource"/>
             </div>
           </div>
       </template>
@@ -53,7 +54,10 @@ export default {
       ErrataData: [],
       filter: ref(''),
       separator: ref('cell'),
-      initialPagination: ref({rowsPerPage: 15}),
+      pagination: ref({
+        rowsPerPage: 15,
+        page: 1
+      }),
       columns: [
         {name: 'advisory', align: 'center', label: 'Advisory', field: 'advisory'},
         {name: 'description', align: 'center', label: 'Description', field: 'description'},
@@ -77,7 +81,7 @@ export default {
     this.loadErrataData();
   },
   computed: {
-    AdvirosiesList () {
+    AdvisoriesList () {
       let rows = []
       for (let i in this.ErrataData) {
         rows.push({
@@ -117,6 +121,8 @@ export default {
     },
     updateErrataSource () {
       this.loadErrataData()
+      // Go back to page 1 when reloading data
+      this.pagination.page = 1
     },
     fetchErratasFromVersion (version) {
       return new Promise(resolve => {
