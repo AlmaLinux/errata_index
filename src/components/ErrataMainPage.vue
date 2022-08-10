@@ -6,7 +6,7 @@
 
       <template v-slot:top-left>
           <div class="row" style="align-items: center;">
-            <div class="col-3">
+            <div class="col-4">
               <q-input borderless dense v-model="filter" placeholder="Search" dark style="padding-left: 20px;">
                 <template v-slot:prepend>
                   <q-icon name="search" />
