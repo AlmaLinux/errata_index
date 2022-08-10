@@ -1,7 +1,7 @@
 <template>
   <div>
     <q-layout view="hHh lpr fff" style="max-height: 921px; min-height: 921px;">
-      <q-header style="height: 60px; background-color: #082336;">
+      <q-header style="height: 52px; background-color: #082336;">
         <q-toolbar>
           <q-toolbar-title>
             <img class="header-logo" src="./assets/misc/static/almalinux-logo.png" alt="AlmaLinux">
@@ -34,7 +34,7 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
+  margin-top: 52px;
 }
 .header-logo {
   float: left;
