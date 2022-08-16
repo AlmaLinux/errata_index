@@ -64,7 +64,9 @@ export default {
         // This colum will only be shown when showing the erratas for all AlmaLinux versions
         {name: 'almalinux_version', align: 'center', label: 'AlmaLinux Version', field: 'almalinux_version'},
         {name: 'severity', align: 'center', label: 'Severity', field: 'severity'},
-        {name: 'publish_date', align: 'center', label: 'Publish Date', field: 'publish_date'}
+        {name: 'publish_date', align: 'center', label: 'Publish Date', field: 'publish_date'},
+        // The references column is never shown, it is only used to search by CVE number
+        {name: 'references', field: 'references', classes: 'hidden', headerClasses: 'hidden'},
       ],
       visibleColumns: ['advisory', 'description', 'severity', 'publish_date'],
       errataSourceOptions: [],
@@ -89,7 +91,9 @@ export default {
           'almalinux_version': this.ErrataData[i]['almalinux_version'],
           'description': this.ErrataData[i]['summary'],
           'severity': this.ErrataData[i]['severity'],
-          'publish_date': this.convertTimestamp(this.ErrataData[i]['updated_date'])
+          'publish_date': this.convertTimestamp(this.ErrataData[i]['updated_date']),
+          // We stringify references to easily search by CVE
+          'references': JSON.stringify(this.ErrataData[i]['references'])
         })
       }
       return rows.sort((first, second) => new Date(second['publish_date']) - new Date(first['publish_date']))
@@ -164,7 +168,8 @@ export default {
       })
     },
     showVersionColumn (show) {
-      let noVersion = ['advisory', 'description', 'severity', 'publish_date']
+      // The references column is never shown, but included to be able to search by CVE
+      let noVersion = ['advisory', 'description', 'severity', 'publish_date', 'references']
       this.visibleColumns = show? noVersion.concat('almalinux_version'): noVersion
     }
   }
