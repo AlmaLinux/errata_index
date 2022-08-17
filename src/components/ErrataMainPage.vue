@@ -191,8 +191,11 @@ export default {
       // Default filter method taken from Quasar and slightly updated to
       // fit our needs, see:
       // https://github.com/quasarframework/quasar/blob/dev/ui/src/components/table/table-filter.js#L8
+      var searchCols = cols.filter(col => {
+        return (col.name != 'references')? col: null
+      })
       return rows.filter(
-        row => cols.some(col => {
+        row => searchCols.some(col => {
           const val = cellValue(col, row) + ''
           const haystack = (val === 'undefined' || val === 'null') ? '' : val.toLowerCase()
           return haystack.indexOf(search) !== -1
@@ -201,12 +204,12 @@ export default {
     },
     cveSearch (rows, search, cols, cellValue) {
       // We only search for a CVE ids in the description or in references fields
-      var cveSearchCols = cols.filter(col => {
+      var searchCols = cols.filter(col => {
         return (col.name == 'description' || col.name == 'references')? col: null
       })
       let filteredResults = []
       filteredResults = rows.filter(
-        row => cveSearchCols.some(col => {
+        row => searchCols.some(col => {
           let val = cellValue(col, row)
           // Description is a string and references is an object
           val = typeof(val) === 'string' ?
