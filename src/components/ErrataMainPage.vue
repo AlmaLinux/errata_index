@@ -203,11 +203,14 @@ export default {
       )
     },
     cveSearch (rows, search, cols, cellValue) {
+      let filteredResults = []
+      // We need to ensure that we do not return anything until
+      // a complete CVE id is provided
+      if (!search.match(/^cve-\d{4}-\d{4,7}$/, 'i')) return filteredResults
       // We only search for a CVE ids in the description or in references fields
       var searchCols = cols.filter(col => {
         return (col.name == 'description' || col.name == 'references')? col: null
       })
-      let filteredResults = []
       filteredResults = rows.filter(
         row => searchCols.some(col => {
           let val = cellValue(col, row)
