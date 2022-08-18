@@ -1,13 +1,13 @@
 <template>
   <div>
     <q-table v-model:pagination="pagination" :columns="columns" :visibleColumns="visibleColumns"
-             :rows="AdvisoriesList" :separator="separator" :filter="filter" flat bordered square
-             @row-click="openErrata" style="border: #082336; color: #082336;" class="my-sticky-dynamic">
+             :rows="AdvisoriesList" :separator="separator" :filter="filter" :filter-method="filterResults"
+             flat bordered square @row-click="openErrata" style="border: #082336; color: #082336;" class="my-sticky-dynamic">
 
       <template v-slot:top-left>
           <div class="row" style="align-items: center;">
             <div class="col-4">
-              <q-input borderless dense v-model="filter" placeholder="Search" dark style="padding-left: 20px;">
+              <q-input borderless dense v-model="search" placeholder="Search" dark style="padding-left: 20px;">
                 <template v-slot:prepend>
                   <q-icon name="search" />
                 </template>
@@ -52,7 +52,7 @@ export default {
   data () {
     return {
       ErrataData: [],
-      filter: ref(''),
+      search: '',
       separator: ref('cell'),
       pagination: ref({
         rowsPerPage: 15,
@@ -60,13 +60,16 @@ export default {
       }),
       columns: [
         {name: 'advisory', align: 'center', label: 'Advisory', field: 'advisory'},
-        {name: 'description', align: 'center', label: 'Description', field: 'description'},
+        {name: 'summary', align: 'center', label: 'Summary', field: 'summary'},
         // This colum will only be shown when showing the erratas for all AlmaLinux versions
         {name: 'almalinux_version', align: 'center', label: 'AlmaLinux Version', field: 'almalinux_version'},
         {name: 'severity', align: 'center', label: 'Severity', field: 'severity'},
-        {name: 'publish_date', align: 'center', label: 'Publish Date', field: 'publish_date'}
+        {name: 'publish_date', align: 'center', label: 'Publish Date', field: 'publish_date'},
+        // These two columns are never shown, they are only used to search by CVE number
+        {name: 'description', field: 'description', classes: 'hidden', headerClasses: 'hidden'},
+        {name: 'references', field: 'references', classes: 'hidden', headerClasses: 'hidden'}
       ],
-      visibleColumns: ['advisory', 'description', 'severity', 'publish_date'],
+      visibleColumns: ['advisory', 'summary', 'severity', 'publish_date', 'description'],
       errataSourceOptions: [],
       errataSource: ref('All')
     }
@@ -87,12 +90,17 @@ export default {
         rows.push({
           'advisory': this.ErrataData[i]['updateinfo_id'],
           'almalinux_version': this.ErrataData[i]['almalinux_version'],
-          'description': this.ErrataData[i]['summary'],
+          'summary': this.ErrataData[i]['summary'],
           'severity': this.ErrataData[i]['severity'],
-          'publish_date': this.convertTimestamp(this.ErrataData[i]['updated_date'])
+          'publish_date': this.convertTimestamp(this.ErrataData[i]['updated_date']),
+          'description': this.ErrataData[i]['description'],
+          'references': this.ErrataData[i]['references']
         })
       }
       return rows.sort((first, second) => new Date(second['publish_date']) - new Date(first['publish_date']))
+    },
+    filter () {
+      return this.search.toLowerCase()
     }
   },
   methods: {
@@ -164,8 +172,59 @@ export default {
       })
     },
     showVersionColumn (show) {
-      let noVersion = ['advisory', 'description', 'severity', 'publish_date']
+      // The references and description columns are never shown, but included to be able to search by CVE
+      let noVersion = ['advisory', 'summary', 'severity', 'publish_date', 'description','references']
       this.visibleColumns = show? noVersion.concat('almalinux_version'): noVersion
+    },
+    filterResults (rows, search, cols, cellValue) {
+      let filteredResults = []
+      // We assume that the user is searching by CVE when they enters 'cve'
+      // At that point, no results will be returned back until a valid
+      // CVE id is entered.
+      const cveSearch = search.match(/^cve/, 'i')
+      filteredResults = cveSearch?
+        this.cveSearch(rows, search, cols, cellValue) :
+        this.defaultSearch(rows, search, cols, cellValue)
+      return filteredResults;
+    },
+    defaultSearch (rows, search, cols, cellValue) {
+      // Default filter method taken from Quasar and slightly updated to
+      // fit our needs, see:
+      // https://github.com/quasarframework/quasar/blob/dev/ui/src/components/table/table-filter.js#L8
+      var searchCols = cols.filter(col => {
+        return (col.name != 'references')? col: null
+      })
+      return rows.filter(
+        row => searchCols.some(col => {
+          const val = cellValue(col, row) + ''
+          const haystack = (val === 'undefined' || val === 'null') ? '' : val.toLowerCase()
+          return haystack.indexOf(search) !== -1
+        })
+      )
+    },
+    cveSearch (rows, search, cols, cellValue) {
+      let filteredResults = []
+      // We need to ensure that we do not return anything until
+      // a complete CVE id is provided
+      if (!search.match(/^cve-\d{4}-\d{4,7}$/, 'i')) return filteredResults
+      // We only search for CVE ids in the 'description' and 'references' columns
+      var searchCols = cols.filter(col => {
+        return (col.name == 'description' || col.name == 'references')? col: null
+      })
+      filteredResults = rows.filter(
+        row => searchCols.some(col => {
+          let val = cellValue(col, row)
+          // description is a string and references is an object
+          val = typeof(val) === 'string' ?
+            val:
+            JSON.stringify(val)
+          // We search for CVE id and we make sure that it is not
+          // followed by a digit
+          const regex = new RegExp(search + '[^0-9]', 'i')
+          return val.match(regex)
+        })
+      )
+      return filteredResults
     }
   }
 }
