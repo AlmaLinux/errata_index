@@ -1,6 +1,6 @@
 <template>
   <div>
-    <q-layout view="hHh lpr fff" style="max-height: 921px; min-height: 921px;">
+    <q-layout view="hHh lpr fff" style="max-height: calc(100vh - 52px); min-height: calc(100vh - 52px);">
       <q-header style="height: 52px; background-color: #082336;">
         <q-toolbar>
           <q-toolbar-title>
