@@ -237,7 +237,7 @@ export default {
   }
   .my-sticky-dynamic {
     /* height or max-height is important */
-    height: 921px;
+    max-height: calc(100vh - 52px); /* - logo bar height */
     /* this will be the loading indicator */ }
     .my-sticky-dynamic .q-table th {
       font-size: 12.5pt;
