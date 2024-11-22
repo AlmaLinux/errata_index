@@ -8,7 +8,7 @@ body {
     line-height: 1.7;
     font-weight: 300;
 	color: #000;
-	background: url('alma-light-bg.jpg') top center no-repeat;
+	background: #dcd7d740;
 	background-size: cover;
 }
 a {
@@ -16,7 +16,7 @@ a {
 	text-decoration: underline;
 }
 a:hover {
-	color: rgb(0,105,218);
+	color: #017698;
 }
 .header {
     height:50px;
@@ -28,8 +28,11 @@ a:hover {
     margin-top: 0.65rem;
     margin-left: -1rem;
     vertical-align: top;
-	width: 160px;
-	
+	 width: 160px;
+    transition: transform 0.3s ease;
+}
+.header-logo:hover {
+    transform: scale(1.05);
 }
 .tabs-content {
 	 border: 0;
@@ -64,7 +67,9 @@ a:hover {
 .card{
     background-color: white;
     margin: 1rem 0 2rem 0;
-    box-shadow: 1px 0 5px -1px #888;
+    box-shadow: 1px 0 5px -1px #888; 
+    border-radius: 0.5rem; 
+    overflow: hidden;
 }
 .card-header{
     padding-top: 0.5rem;
@@ -120,6 +125,7 @@ a:hover {
 
 .card-header > h5 {
     display: inline-block;
+    font-family: 'Montserrat', sans-serif;
 }
 
 .header-container li{
@@ -128,4 +134,9 @@ a:hover {
 
 .checksum {
     color: #666666;
+}
+.row {
+    max-width: 70%;
+    margin-right: auto;
+    margin-left: auto;
 }

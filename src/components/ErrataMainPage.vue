@@ -234,6 +234,10 @@ export default {
   .errata_table {
     background-color: #082336;
     color: white;
+    font-family: 'Montserrat', sans-serif;
+  }
+  .q-table {
+    font-family: 'Montserrat', sans-serif;
   }
   .my-sticky-dynamic {
     /* height or max-height is important */
