@@ -26,3 +26,7 @@ Do you want to contribute with source code?
 2. Create a new feature branch
 3. Write your change
 4. Submit a pull request
+
+### Style Guidelines
+
+When making any style-related changes to this project, please ensure they align with the [AlmaLinux BrandBook](https://github.com/AlmaLinux/almalinux.org/blob/master/static/branding/AlmaLinux%20BrandBook.pdf). 
