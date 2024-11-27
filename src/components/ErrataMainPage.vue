@@ -6,17 +6,15 @@
 
       <template v-slot:top-left>
           <div class="row" style="align-items: center;">
-            <div class="col-4">
-              <q-input borderless dense v-model="search" placeholder="Search" dark style="padding-left: 20px;">
-                <template v-slot:prepend>
-                  <q-icon name="search" />
-                </template>
-              </q-input>
-            </div>
-            <div class="col-8">
-              <q-btn-toggle push v-model="errataSource" :options="errataSourceOptions"
-                            toggle-color="amber-8" @update:model-value="updateErrataSource"/>
-            </div>
+            <q-input borderless dense v-model="search" placeholder="Search" dark style="width: 10rem; padding-left: 20px;">
+              <template v-slot:prepend>
+                <q-icon name="search" />
+              </template>
+            </q-input>
+            <q-select emit-value standout v-model="errataSource" :options="errataSourceOptions" label-color="green"
+                      @update:model-value="updateErrataSource" label="Version" style="width: 9.5rem; margin-left: 12px;"/>
+            <q-select standout v-model="severity" :options="severityOptions" label-color="yellow"
+                      @update:model-value="updateErrataSource" label="Severity" style="width: 8rem; margin-left: 12px;"/>
           </div>
       </template>
 
@@ -71,7 +69,9 @@ export default {
       ],
       visibleColumns: ['advisory', 'summary', 'severity', 'publish_date', 'description'],
       errataSourceOptions: [],
-      errataSource: ref('All')
+      errataSource: ref('All'),
+      severityOptions: ['All', 'Critical', 'Important', 'Moderate', 'Low'],
+      severity: 'All'
     }
   },
   created () {
@@ -100,7 +100,10 @@ export default {
       return rows.sort((first, second) => new Date(second['publish_date']) - new Date(first['publish_date']))
     },
     filter () {
-      return this.search.toLowerCase()
+      return {
+        search: this.search.toLowerCase(),
+        severity: this.severity
+      }
     }
   },
   methods: {
@@ -176,15 +179,19 @@ export default {
       let noVersion = ['advisory', 'summary', 'severity', 'publish_date', 'description','references']
       this.visibleColumns = show? noVersion.concat('almalinux_version'): noVersion
     },
-    filterResults (rows, search, cols, cellValue) {
+    filterResults (rows, filter, cols, cellValue) {
       let filteredResults = []
       // We assume that the user is searching by CVE when they enters 'cve'
       // At that point, no results will be returned back until a valid
       // CVE id is entered.
-      const cveSearch = search.match(/^cve/, 'i')
+      const cveSearch = filter.search.match(/^cve/, 'i')
       filteredResults = cveSearch?
-        this.cveSearch(rows, search, cols, cellValue) :
-        this.defaultSearch(rows, search, cols, cellValue)
+        this.cveSearch(rows, filter.search, cols, cellValue) :
+        this.defaultSearch(rows, filter.search, cols, cellValue)
+      // Apply severity filter.
+      if (this.severity !== 'All') {
+        filteredResults = filteredResults.filter(row => row.severity == this.severity)
+      }
       return filteredResults;
     },
     defaultSearch (rows, search, cols, cellValue) {
