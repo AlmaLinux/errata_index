@@ -2,37 +2,40 @@
 
 body {
     background-color: #F0F0F0;
-	background-color: #FFF;
-	font-size: 16px;
-	font-family: 'Montserrat', sans-serif;
+    background-color: #FFF;
+    font-size: 16px;
+    font-family: 'Montserrat', sans-serif;
     line-height: 1.7;
     font-weight: 300;
-	color: #000;
-	background: url('alma-light-bg.jpg') top center no-repeat;
-	background-size: cover;
+    color: #000;
+    background: #dcd7d740;
+    background-size: cover;
 }
 a {
-	color: #000;
-	text-decoration: underline;
+    color: #000;
+    text-decoration: underline;
 }
 a:hover {
-	color: rgb(0,105,218);
+    color: #017698;
 }
 .header {
     height:50px;
     background-color:white;
     box-shadow: 10px 0 5px -2px #888;
-	background: #082336;
+    background: #082336;
 }
 .header-logo {
     margin-top: 0.65rem;
     margin-left: -1rem;
     vertical-align: top;
-	width: 160px;
-	
+    width: 160px;
+    transition: transform 0.3s ease;
+}
+.header-logo:hover {
+    transform: scale(1.05);
 }
 .tabs-content {
-	 border: 0;
+    border: 0;
 }
 .button-group > a {
     background-color: teal;
@@ -45,7 +48,6 @@ a:hover {
 }
 .button-group > a.active{
     background-color: #F2F2F2;
-
 }
 .button.hollow {
     border: 0px;
@@ -64,12 +66,14 @@ a:hover {
 .card{
     background-color: white;
     margin: 1rem 0 2rem 0;
-    box-shadow: 1px 0 5px -1px #888;
+    box-shadow: 1px 0 5px -1px #888; 
+    border-radius: 0.5rem; 
+    overflow: hidden;
 }
 .card-header{
     padding-top: 0.5rem;
     background-color: #0b2335;
-	background: rgb(11,35,53);
+    background: rgb(11,35,53);
     color: white;
     display: inline-block;
 }
@@ -98,12 +102,10 @@ a:hover {
 .tabs-title > a:hover{
     color: black;
     background-color: #f6f6f6;
-
 }
 .tabs-title > a[aria-selected="true"] {
     color: #3b3b3b;
 }
-
 .tabs-title > a > img{
     margin-top: -2px;
     /*width: 1.1rem;*/
@@ -117,15 +119,18 @@ a:hover {
     margin-top: -0.4rem;
     height: 1.5rem;
 }
-
 .card-header > h5 {
     display: inline-block;
+    font-family: 'Montserrat', sans-serif;
 }
-
 .header-container li{
     display: inline;
 }
-
 .checksum {
     color: #666666;
+}
+.row {
+    max-width: 70%;
+    margin-right: auto;
+    margin-left: auto;
 }
