@@ -6,6 +6,9 @@ It consumes the data exported from the AlmaLinux Build System and provides an in
 The web application has been created using [Vue.js](https://vuejs.org/) and uses the [Quasar Framework](https://quasar.dev/).
 
 ## Set up and run the code
+
+You need Node.js >18 installed on your system. Alternatively, you can use [nvm](https://github.com/nvm-sh/nvm/) to set up multiple versions of Node.js.
+
 * You need to install the dependencies running: `npm install`
 * To compile and hot-reload during development, run: `npm run serve`
 * To compile and minify the web application for production, run: `npm run build`
