@@ -288,4 +288,7 @@ export default {
     .my-sticky-dynamic .text-grey-8 {
       color: white;
     }
+    .my-sticky-dynamic .q-table__middle {
+      scrollbar-width: thin;
+    }
 </style>
