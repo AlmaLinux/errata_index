@@ -3,7 +3,7 @@
     <q-layout view="hHh lpr fff" style="max-height: calc(100vh - 52px); min-height: calc(100vh - 52px);">
       <q-header style="height: 52px; background-color: #082336;">
         <q-toolbar>
-           <q-toolbar-title style="display: flex; align-items: center; justify-content: flex-start;">
+           <q-toolbar-title style="display: flex; align-items: center; justify-content: flex-start; padding-right: 40px">
             <img class="header-logo" src="./assets/misc/static/logo.png" alt="AlmaLinux">
             <span class="header-text" style="margin-left: 10px; color: white; display: flex; align-items: center;">AlmaLinux Errata</span>
           </q-toolbar-title>
@@ -43,7 +43,6 @@ export default {
   margin-top: 52px;
 }
 .header-logo {
-  margin-left: 20px;
   height: 2.2rem;
   width: auto; 
   margin-right: 0.8rem;
@@ -57,5 +56,41 @@ export default {
   display: flex;
   align-items: center;
   line-height: normal; 
+}
+
+@media (max-width: 900px) {
+    .q-toolbar {
+        padding-top: 0; 
+        padding-bottom: 0; 
+        justify-content: flex-start; 
+    }
+    .q-toolbar-title {
+        display: flex;
+        align-items: center;
+        margin-right: 10px; 
+    }
+     .header-text {
+        display: none !important; 
+    }
+    .q-btn {
+        font-size: 0.8rem; 
+        padding: 0.3rem 0.5rem; 
+    }
+    .q-toolbar q-btn:last-child {
+        margin-right: 20px !important; 
+    }
+}
+@media (max-width: 420px) {
+    .header-logo {
+        width: 80px; 
+        margin-right: 5px; 
+    }
+    .q-btn {
+        font-size: 0.6rem;
+        padding: 0.3rem;
+    }
+    .header-text {
+        display: none !important; 
+    }
 }
 </style>
