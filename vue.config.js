@@ -1,3 +1,5 @@
+const NodePolyfillPlugin = require("node-polyfill-webpack-plugin")
+
 module.exports = {
   publicPath: '/',
   pluginOptions: {
@@ -8,5 +10,8 @@ module.exports = {
   },
   transpileDependencies: [
     'quasar'
-  ]
+  ],
+  configureWebpack: {
+    plugins: [new NodePolyfillPlugin()]
+  }
 }
