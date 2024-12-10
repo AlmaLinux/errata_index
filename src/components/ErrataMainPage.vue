@@ -245,7 +245,6 @@ export default {
   }
   .q-table {
     font-family: 'Montserrat', sans-serif;
-    min-height: 100vh;
   }
   .my-sticky-dynamic {
     /* height or max-height is important */
