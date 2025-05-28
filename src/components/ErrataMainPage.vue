@@ -42,7 +42,8 @@ const ERRATA_SOURCES = {
 // Label: Folder
   'All': null,
   'AlmaLinux 8': '8',
-  'AlmaLinux 9': '9'
+  'AlmaLinux 9': '9',
+  'AlmaLinux 9': '10'
 }
 
 export default {
