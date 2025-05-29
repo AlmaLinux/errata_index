@@ -43,7 +43,7 @@ const ERRATA_SOURCES = {
   'All': null,
   'AlmaLinux 8': '8',
   'AlmaLinux 9': '9',
-  'AlmaLinux 9': '10'
+  'AlmaLinux 10': '10'
 }
 
 export default {
