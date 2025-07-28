@@ -30,6 +30,13 @@
           {{ props.value }}
         </q-td>
       </template>
+      <template v-slot:body-cell-advisory="props">
+        <q-td :props="props">
+          <a :href="makeErrataURL(props.row)" @click.stop>
+            {{ props.value }}
+          </a>
+        </q-td>
+      </template>
     </q-table>
   </div>
 </template>
@@ -122,11 +129,14 @@ export default {
       }
     },
     openErrata (evt, row) {
-      window.location.href = this.makeValidHref(row['almalinux_version'], row['advisory'])
+      window.location.href = this.makeErrataURL(row)
     },
     convertTimestamp (timestamp) {
       let date = new Date(timestamp['$date'])
       return date.toDateString()
+    },
+    makeErrataURL(row) {
+      return this.makeValidHref(row['almalinux_version'], row['advisory'])
     },
     makeValidHref (version, advisory) {
       return `/${version}/${advisory.replace(/:/g, "-")}.html`
